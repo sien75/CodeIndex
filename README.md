@@ -29,3 +29,5 @@ Use ci-analyzer to analyze this project
 > Note: Project analysis consumes a significant amount of tokens.
 
 When the analysis is complete, the Agent will prompt you to open a URL. Open it and link it to your local project directory — you'll then be able to browse the code understanding report with source code correspondence.
+
+> **Browser support**: Linking to a local project directory requires the [File System Access API](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API), which is currently only supported in **Chrome** (and Chromium-based browsers like Edge). Safari and Firefox do not support this feature yet.
