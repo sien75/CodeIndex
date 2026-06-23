@@ -1,0 +1,8 @@
+{
+  "name": "ci-coverage",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "ci-coverage": "./bin/ci-coverage.mjs"
+  }
+}
