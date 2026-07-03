@@ -267,7 +267,10 @@ a.module-card {
   display: block;
   text-decoration: none;
   color: inherit;
-  margin: 1rem 0;
+  /* Use explicit top/bottom margins so the horizontal auto margins from
+     body:not(.codeindex-layout) > * keep the cards centered. */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 a.module-card section {
