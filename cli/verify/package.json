@@ -1,9 +1,9 @@
 {
-  "name": "ci-verify",
+  "name": "codeindex-verify",
   "version": "0.1.0",
   "type": "module",
   "bin": {
-    "ci-verify": "./bin/ci-verify.mjs"
+    "codeindex-verify": "./bin/codeindex-verify.mjs"
   },
   "dependencies": {
     "@mermaid-js/parser": "^0.4.0",

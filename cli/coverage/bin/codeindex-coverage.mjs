@@ -8,13 +8,13 @@ const args = process.argv.slice(2);
 const command = args[0];
 
 function usage() {
-  console.log(`ci-coverage — AI code understanding coverage tracker
+  console.log(`codeindex-coverage — AI code understanding coverage tracker
 
 Usage:
-  ci-coverage init [dir]                                              Initialize coverage tracking
-  ci-coverage mark <file> <startLine>-<endLine> --depth <depth>       Mark lines as read
-  ci-coverage status [--by-file]                                      Show coverage stats
-  ci-coverage help                                                    Show this help
+  codeindex-coverage init [dir]                                              Initialize coverage tracking
+  codeindex-coverage mark <file> <startLine>-<endLine> --depth <depth>       Mark lines as read
+  codeindex-coverage status [--by-file]                                      Show coverage stats
+  codeindex-coverage help                                                    Show this help
 
 Depth levels: deep | mapped | ignored`);
 }
@@ -36,7 +36,7 @@ switch (command) {
     const depth = depthIdx !== -1 ? args[depthIdx + 1] : undefined;
 
     if (!file || !range || !depth) {
-      console.error('Usage: ci-coverage mark <file> <startLine>-<endLine> --depth <deep|mapped|ignored>');
+      console.error('Usage: codeindex-coverage mark <file> <startLine>-<endLine> --depth <deep|mapped|ignored>');
       process.exit(1);
     }
     mark(undefined, file, range, depth);

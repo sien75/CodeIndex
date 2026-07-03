@@ -1,19 +1,19 @@
 ---
-name: ci-analyzer
-description: Coverage-driven code understanding analysis. Read source files one by one, use language tools for precise information, manage coverage with the ci-coverage CLI, until reaching ≥95%.
+name: codeindex-analyzer
+description: Coverage-driven code understanding analysis. Read source files one by one, use language tools for precise information, manage coverage with the codeindex-coverage CLI, until reaching ≥95%.
 ---
 
-# CI Analyzer
+# CodeIndex Analyzer
 
-You are a code analyst. Your task is to **read the target project's source code file by file**, write an understanding report in plain, accessible language, and use the `ci-coverage` CLI to precisely record which lines you've read, until coverage reaches 95% or above.
+You are a code analyst. Your task is to **read the target project's source code file by file**, write an understanding report in plain, accessible language, and use the `codeindex-coverage` CLI to precisely record which lines you've read, until coverage reaches 95% or above.
 
 ## Prerequisites
 
-Check that `ci-coverage` and `ci-verify` commands are available:
+Check that `codeindex-coverage` and `codeindex-verify` commands are available:
 
 ```bash
-ci-coverage help
-ci-verify help
+codeindex-coverage help
+codeindex-verify help
 ```
 
 If the commands don't exist, install them first:
@@ -33,7 +33,7 @@ After installation, confirm that `~/.local/bin` is in your PATH, then run the ab
 ### Step 1: Initialization
 
 ```bash
-ci-coverage init [target project directory]
+codeindex-coverage init [target project directory]
 ```
 
 Run this in the target project directory to establish the file baseline.
@@ -50,7 +50,7 @@ After reading:
 - Mark each file immediately after reading:
 
 ```bash
-ci-coverage mark <file> <startLine>-<endLine> --depth mapped
+codeindex-coverage mark <file> <startLine>-<endLine> --depth mapped
 ```
 
 ### Step 1a: Choose Language Toolchain
@@ -109,26 +109,26 @@ Prompt for each subagent: read `subagent.md` (same directory as this file), subs
 After all subagents finish, check coverage:
 
 ```bash
-ci-coverage status
+codeindex-coverage status
 ```
 
 - **< 95%**: Review the list of uncovered files (`status --by-file`), locate uncovered files, and launch new subagents to read them
 - **≥ 95%**: Proceed to wrap-up
 
 About uncovered files:
-- **Files that genuinely don't need reading** (generated code, lock files, binary resources, config templates, etc.) can be skipped with `ci-coverage mark <file> 1-<totalLines> --depth ignored`
+- **Files that genuinely don't need reading** (generated code, lock files, binary resources, config templates, etc.) can be skipped with `codeindex-coverage mark <file> 1-<totalLines> --depth ignored`
 - **But be strict**: if a file is readable and related to business flows, it must be read — don't skip because "it's close enough"
 
 ### Step 2b: Generate Summary HTML
 
-After completing the HTML for each module, write the index page to `.ci/modules/index.html`. As with subagents, **write only content — no styles, scripts, or HTML boilerplate**.
+After completing the HTML for each module, write the index page to `.codeindex/modules/index.html`. As with subagents, **write only content — no styles, scripts, or HTML boilerplate**.
 
 index.html must include:
 - `<h1>` Project name
 - `<p>` Project overview (in plain, accessible language)
 - **User action summary**: aggregate all user actions / external calls across modules. Note which module each action belongs to. This gives readers an immediate sense of "what this system can do"
 - Module list: each module in a `<section>`, with `<h2>` as the module name (matching the `<h1>` of the corresponding `modules/{scenario_name}.html`), and `<p>` as a one-sentence summary
-- Coverage data should not be written manually — it is auto-injected by `ci render`
+- Coverage data should not be written manually — it is auto-injected by `codeindex render`
 
 Index page example:
 
@@ -162,10 +162,10 @@ After writing, proceed to the verification step.
 
 ### Step 2c: Verify
 
-Run verification on all module HTML files under `.ci/modules/` (excluding index.html):
+Run verification on all module HTML files under `.codeindex/modules/` (excluding index.html):
 
 ```bash
-ci-verify .ci/modules
+codeindex-verify .codeindex/modules
 ```
 
 Verification covers:
@@ -178,8 +178,8 @@ Verification covers:
 If there are errors:
 
 1. Read the verification output, identify the problem file(s) and specific errors
-2. Launch a subagent to fix the corresponding `.ci/modules/{file}.html` — pass the verification error details and the original HTML file path to the subagent so it can read the file and fix the issues
-3. Re-run `ci-verify .ci/modules` after fixing
+2. Launch a subagent to fix the corresponding `.codeindex/modules/{file}.html` — pass the verification error details and the original HTML file path to the subagent so it can read the file and fix the issues
+3. Re-run `codeindex-verify .codeindex/modules` after fixing
 4. Repeat until verification passes (0 errors)
 
 Warnings (e.g., node count exceeds 40) do not block the pipeline but should be noted.
@@ -188,30 +188,30 @@ Once verification passes, proceed to the rendering step.
 
 ### Step 3: Render
 
-Read all HTML fragments under `.ci/modules/`, assemble each into a complete HTML page, and output to `.ci/views/`.
+Read all HTML fragments under `.codeindex/modules/`, assemble each into a complete HTML page, and output to `.codeindex/views/`.
 
 For each file:
 
 1. **Add HTML boilerplate** — add `<!DOCTYPE>`, `<head>`, `<body>`, extract `<title>` from `<h1>`
-2. **Include static assets** — include `assets/ci.css` in `<head>`, include `assets/ci.js` at the end of `<body>` (ci.js automatically loads mermaid and Monaco Editor from CDN — no need to include them manually)
+2. **Include static assets** — include `assets/codeindex.css` in `<head>`, include `assets/codeindex.js` at the end of `<body>` (codeindex.js automatically loads mermaid and Monaco Editor from CDN — no need to include them manually)
 3. **Add navigation** — module pages get a "← Back to overview" link pointing to index.html
 4. **Handle index links** — match each `<section>`'s `<h2>` text in index.html to the corresponding module file name, wrap the section as a clickable link
-5. **Inject coverage** — append coverage info (from `ci-coverage status`) at the end of the index page
+5. **Inject coverage** — append coverage info (from `codeindex-coverage status`) at the end of the index page
 6. **Add source panel container** — append `<aside id="source-panel"><div id="source-header"></div><div id="monaco-container"></div></aside>` to the `<body>` of module pages
 7. **Preserve sourceMap** — subagents have already written `<script>window.__sourceMap = {...}</script>` at the end of content files (containing only file, startLine, endLine — no source code content). Keep them as-is; no additional processing needed. After page load, users select the project root directory via the File System Access API, and clicking flowchart nodes reads source code from the local filesystem and displays it in Monaco Editor
 
-Static asset files (ci.css, ci.js) are located in the `assets/` directory under this skill. Copy them to `.ci/views/assets/`:
+Static asset files (codeindex.css, codeindex.js) are located in the `assets/` directory under this skill. Copy them to `.codeindex/views/assets/`:
 
 ```bash
-mkdir -p .ci/views/assets
+mkdir -p .codeindex/views/assets
 ```
 
-Then copy `assets/ci.css` and `assets/ci.js` from the skill directory to `.ci/views/assets/`.
+Then copy `assets/codeindex.css` and `assets/codeindex.js` from the skill directory to `.codeindex/views/assets/`.
 
 After assembly, pick an unused port (e.g., 5678) and start a static file server:
 
 ```bash
-npx serve .ci/views -l <port>
+npx serve .codeindex/views -l <port>
 ```
 
 Tell the user to open the corresponding address in a browser to browse the analysis report.

@@ -9,8 +9,8 @@ It guides AI to read projects along real code paths, record source coverage, gen
 ## Components
 
 - **`skill/`** — Core usage guide and workflow: how to analyze projects, dispatch subagents, track coverage, verify reports, and render pages
-- **`cli/coverage/`** — `ci-coverage`, for recording and tracking code reading coverage
-- **`cli/verify/`** — `ci-verify`, for validating the quality of generated HTML reports
+- **`cli/coverage/`** — `codeindex-coverage`, for recording and tracking code reading coverage
+- **`cli/verify/`** — `codeindex-verify`, for validating the quality of generated HTML reports
 
 ## Usage
 
@@ -23,7 +23,7 @@ npx skills add sien75/CodeIndex
 Once installed, in the project you want to analyze, say:
 
 ```text
-Use ci-analyzer to analyze this project
+Use codeindex-analyzer to analyze this project
 ```
 
 > Note: Project analysis consumes a significant amount of tokens.

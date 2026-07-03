@@ -1,8 +1,8 @@
 {
-  "name": "ci-coverage",
+  "name": "codeindex-coverage",
   "version": "0.1.0",
   "type": "module",
   "bin": {
-    "ci-coverage": "./bin/ci-coverage.mjs"
+    "codeindex-coverage": "./bin/codeindex-coverage.mjs"
   }
 }

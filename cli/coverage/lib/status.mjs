@@ -4,15 +4,15 @@ import { fileHash } from './utils.mjs';
 
 export function status(targetDir, byFile) {
   const resolved = targetDir || process.cwd();
-  const ciDir = join(resolved, '.ci');
+  const codeindexDir = join(resolved, '.codeindex');
 
-  if (!existsSync(join(ciDir, 'files.json'))) {
-    console.error('Error: .ci/files.json not found. Run "ci-coverage init" first.');
+  if (!existsSync(join(codeindexDir, 'files.json'))) {
+    console.error('Error: .codeindex/files.json not found. Run "codeindex-coverage init" first.');
     process.exit(1);
   }
 
-  const filesData = JSON.parse(readFileSync(join(ciDir, 'files.json'), 'utf-8'));
-  const coverageData = JSON.parse(readFileSync(join(ciDir, 'coverage.json'), 'utf-8'));
+  const filesData = JSON.parse(readFileSync(join(codeindexDir, 'files.json'), 'utf-8'));
+  const coverageData = JSON.parse(readFileSync(join(codeindexDir, 'coverage.json'), 'utf-8'));
 
   let totalLines = 0;
   let deepLines = 0;

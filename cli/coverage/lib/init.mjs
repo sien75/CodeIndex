@@ -2,7 +2,7 @@ import { readdirSync, statSync, mkdirSync, writeFileSync, existsSync } from 'nod
 import { join, relative } from 'node:path';
 import { fileHash, countLines } from './utils.mjs';
 
-const IGNORE_DIRS = new Set(['node_modules', '.git', '.ci', '.gagcode', 'dist', '.next', '.cache']);
+const IGNORE_DIRS = new Set(['node_modules', '.git', '.codeindex', '.gagcode', 'dist', '.next', '.cache']);
 const IGNORE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.gif', '.ico', '.woff', '.woff2', '.ttf', '.eot', '.mp3', '.mp4', '.zip', '.tar', '.gz']);
 
 function walk(dir, root, files = []) {
@@ -25,9 +25,9 @@ function walk(dir, root, files = []) {
 
 export function init(targetDir) {
   const resolved = targetDir || process.cwd();
-  const ciDir = join(resolved, '.ci');
+  const codeindexDir = join(resolved, '.codeindex');
 
-  if (!existsSync(ciDir)) mkdirSync(ciDir, { recursive: true });
+  if (!existsSync(codeindexDir)) mkdirSync(codeindexDir, { recursive: true });
 
   const filePaths = walk(resolved, resolved);
   const files = filePaths.map(rel => {
@@ -39,9 +39,9 @@ export function init(targetDir) {
     };
   });
 
-  writeFileSync(join(ciDir, 'files.json'), JSON.stringify({ files }, null, 2) + '\n');
-  writeFileSync(join(ciDir, 'coverage.json'), JSON.stringify({ marks: [] }, null, 2) + '\n');
+  writeFileSync(join(codeindexDir, 'files.json'), JSON.stringify({ files }, null, 2) + '\n');
+  writeFileSync(join(codeindexDir, 'coverage.json'), JSON.stringify({ marks: [] }, null, 2) + '\n');
 
-  console.log(`Initialized .ci/ with ${files.length} files`);
+  console.log(`Initialized .codeindex/ with ${files.length} files`);
   console.log(`Total lines: ${files.reduce((s, f) => s + f.lines, 0)}`);
 }

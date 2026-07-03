@@ -10,11 +10,11 @@ const args = process.argv.slice(2);
 const command = args[0];
 
 if (command === 'help' || command === '--help') {
-  console.log(`ci-verify — Validate CI module HTML output
+  console.log(`codeindex-verify — Validate CodeIndex module HTML output
 
 Usage:
-  ci-verify [modulesDir]    Verify all module HTML files in the directory (default: .ci/modules)
-  ci-verify help             Show this help
+  codeindex-verify [modulesDir]    Verify all module HTML files in the directory (default: .codeindex/modules)
+  codeindex-verify help             Show this help
 
 Checks:
   mermaid-single-diagram     Each mermaid block contains exactly one diagram
@@ -28,7 +28,7 @@ Checks:
   process.exit(0);
 }
 
-const modulesDir = resolve(command || '.ci/modules');
+const modulesDir = resolve(command || '.codeindex/modules');
 
 if (!existsSync(modulesDir)) {
   console.error(`Directory not found: ${modulesDir}`);

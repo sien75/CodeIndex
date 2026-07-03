@@ -3,7 +3,7 @@
 
   // -- Project root directory handle (File System Access API + IndexedDB persistence) --
   var rootDirHandle = null;
-  var DB_NAME = 'ci-viewer';
+  var DB_NAME = 'codeindex-viewer';
   var STORE_NAME = 'handles';
   var HANDLE_KEY = 'projectRoot';
 
@@ -50,16 +50,16 @@
   }
 
   function promptForProjectRoot() {
-    if (!window.showDirectoryPicker || document.getElementById('ci-root-banner')) return;
+    if (!window.showDirectoryPicker || document.getElementById('codeindex-root-banner')) return;
 
     var banner = document.createElement('div');
-    banner.id = 'ci-root-banner';
+    banner.id = 'codeindex-root-banner';
     banner.innerHTML =
       '<span>Click to select the project root directory for source code viewing</span>' +
-      '<button id="ci-pick-root">Open Project Folder</button>';
+      '<button id="codeindex-pick-root">Open Project Folder</button>';
     document.body.prepend(banner);
 
-    document.getElementById('ci-pick-root').addEventListener('click', async function () {
+    document.getElementById('codeindex-pick-root').addEventListener('click', async function () {
       try {
         var handle = await window.showDirectoryPicker({ mode: 'read' });
         rootDirHandle = handle;
@@ -105,7 +105,7 @@
   var layoutWrapped = false;
 
   function ensureLayout() {
-    if (layoutWrapped) return document.querySelector('.ci-main');
+    if (layoutWrapped) return document.querySelector('.codeindex-main');
 
     var previousScrollTop = window.pageYOffset ||
       document.documentElement.scrollTop ||
@@ -114,14 +114,14 @@
 
     layoutWrapped = true;
     var main = document.createElement('div');
-    main.className = 'ci-main';
+    main.className = 'codeindex-main';
     var children = Array.from(document.body.childNodes);
     children.forEach(function (child) {
       if (child === panel || (child.tagName && child.tagName === 'SCRIPT')) return;
       main.appendChild(child);
     });
     document.body.insertBefore(main, panel);
-    document.body.classList.add('ci-layout');
+    document.body.classList.add('codeindex-layout');
 
     window.scrollTo(0, 0);
     main.scrollTop = previousScrollTop;
@@ -240,7 +240,7 @@
           return;
         }
       }
-      var banner = document.getElementById('ci-root-banner');
+      var banner = document.getElementById('codeindex-root-banner');
       if (banner) banner.remove();
     }
 
@@ -277,14 +277,14 @@
 
       editor.deltaDecorations(
         editor.getModel().getAllDecorations()
-          .filter(function (d) { return d.options.className === 'ci-highlight-line'; })
+          .filter(function (d) { return d.options.className === 'codeindex-highlight-line'; })
           .map(function (d) { return d.id; }),
         [{
           range: new monaco.Range(startLine, 1, endLine, 1),
           options: {
             isWholeLine: true,
-            className: 'ci-highlight-line',
-            linesDecorationsClassName: 'ci-highlight-gutter'
+            className: 'codeindex-highlight-line',
+            linesDecorationsClassName: 'codeindex-highlight-gutter'
           }
         }]
       );
@@ -322,25 +322,25 @@
   function attachMermaidZoomControls() {
     var diagrams = document.querySelectorAll('.mermaid');
     diagrams.forEach(function (diagram, index) {
-      if (diagram.dataset.ciZoomReady === 'true') return;
+      if (diagram.dataset.codeindexZoomReady === 'true') return;
 
       var svg = diagram.querySelector('svg');
       if (!svg) return;
 
-      diagram.dataset.ciZoomReady = 'true';
+      diagram.dataset.codeindexZoomReady = 'true';
 
       var shell = document.createElement('div');
-      shell.className = 'ci-mermaid-shell';
+      shell.className = 'codeindex-mermaid-shell';
       diagram.parentNode.insertBefore(shell, diagram);
       shell.appendChild(diagram);
 
       var toolbar = document.createElement('div');
-      toolbar.className = 'ci-mermaid-toolbar';
+      toolbar.className = 'codeindex-mermaid-toolbar';
       toolbar.setAttribute('aria-label', 'Mermaid zoom controls');
 
       var zoomOut = createZoomButton('-', 'Zoom out');
       var zoomLabel = document.createElement('span');
-      zoomLabel.className = 'ci-mermaid-zoom-label';
+      zoomLabel.className = 'codeindex-mermaid-zoom-label';
       zoomLabel.textContent = '100%';
       var zoomIn = createZoomButton('+', 'Zoom in');
       var reset = createZoomButton('100%', 'Reset zoom');
@@ -384,14 +384,14 @@
         applyMermaidZoom(svg, zoomLabel, state);
       });
 
-      shell.dataset.ciMermaidIndex = String(index + 1);
+      shell.dataset.codeindexMermaidIndex = String(index + 1);
     });
   }
 
   function createZoomButton(text, title) {
     var button = document.createElement('button');
     button.type = 'button';
-    button.className = 'ci-mermaid-zoom-button';
+    button.className = 'codeindex-mermaid-zoom-button';
     button.textContent = text;
     button.title = title;
     button.setAttribute('aria-label', title);

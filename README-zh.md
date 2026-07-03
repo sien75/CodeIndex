@@ -7,8 +7,8 @@
 ## 组成
 
 - **`skill/`**：核心使用说明和工作流，包含如何分析项目、分发 subagent、记录覆盖率、校验报告、渲染页面
-- **`cli/coverage/`**：`ci-coverage`，用于记录和统计代码阅读覆盖率
-- **`cli/verify/`**：`ci-verify`，用于校验生成的 HTML 报告质量
+- **`cli/coverage/`**：`codeindex-coverage`，用于记录和统计代码阅读覆盖率
+- **`cli/verify/`**：`codeindex-verify`，用于校验生成的 HTML 报告质量
 
 ## 使用
 
@@ -21,7 +21,7 @@ npx skills add sien75/CodeIndex
 安装后，在需要分析的项目里说：
 
 ```text
-使用 ci-analyzer 分析这个项目
+使用 codeindex-analyzer 分析这个项目
 ```
 
 > 注意：分析项目会消耗比较多的 token。

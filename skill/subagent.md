@@ -48,18 +48,18 @@ Mark immediately after reading each section of code:
 
 ```bash
 # Read line by line, understood the logic
-ci-coverage mark <file> <startLine>-<endLine> --depth deep
+codeindex-coverage mark <file> <startLine>-<endLine> --depth deep
 
 # Know the ownership but didn't expand line by line
-ci-coverage mark <file> <startLine>-<endLine> --depth mapped
+codeindex-coverage mark <file> <startLine>-<endLine> --depth mapped
 
 # Imports, blank lines, pure type definitions, etc.
-ci-coverage mark <file> <startLine>-<endLine> --depth ignored
+codeindex-coverage mark <file> <startLine>-<endLine> --depth ignored
 ```
 
 ## f. Output
 
-**Write as you analyze** to `.ci/modules/{scenario_name}.html`.
+**Write as you analyze** to `.codeindex/modules/{scenario_name}.html`.
 
 **You are only responsible for content** — the text to display, diagrams, and source mapping data. Do not write any styles, class names (except `mermaid`), HTML boilerplate (`<!DOCTYPE>`, `<head>`, `<body>`, etc.), or interactive behavior. These will be handled uniformly by the subsequent rendering step.
 
@@ -183,7 +183,7 @@ So:
 
 ## Key constraints
 
-1. **Coverage is computed programmatically** — must call `ci-coverage` to mark; unmarked = unread
+1. **Coverage is computed programmatically** — must call `codeindex-coverage` to mark; unmarked = unread
 2. **Flowcharts must be complete** — all branches, error paths, and external calls must be drawn
 3. **Every node must bind to a source location** — all mermaid nodes (including diamond decision nodes) must have corresponding entries in sourceMap
 4. **No guessing** — when uncertain, use language tools to confirm

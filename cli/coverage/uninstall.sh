@@ -2,13 +2,13 @@
 set -e
 
 INSTALL_DIR="${HOME}/.local/bin"
-LIB_DIR="${INSTALL_DIR}/ci-coverage-lib"
+LIB_DIR="${INSTALL_DIR}/codeindex-coverage-lib"
 
-if [ -f "${INSTALL_DIR}/ci-coverage" ]; then
-  rm "${INSTALL_DIR}/ci-coverage"
-  echo "Removed ${INSTALL_DIR}/ci-coverage"
+if [ -f "${INSTALL_DIR}/codeindex-coverage" ]; then
+  rm "${INSTALL_DIR}/codeindex-coverage"
+  echo "Removed ${INSTALL_DIR}/codeindex-coverage"
 else
-  echo "ci-coverage not found at ${INSTALL_DIR}/ci-coverage"
+  echo "codeindex-coverage not found at ${INSTALL_DIR}/codeindex-coverage"
 fi
 
 if [ -d "${LIB_DIR}" ]; then
@@ -16,4 +16,4 @@ if [ -d "${LIB_DIR}" ]; then
   echo "Removed ${LIB_DIR}"
 fi
 
-echo "Uninstalled ci-coverage."
+echo "Uninstalled codeindex-coverage."

@@ -4,14 +4,14 @@ import { fileHash, mergeRanges } from './utils.mjs';
 
 export function mark(targetDir, file, rangeStr, depth) {
   const resolved = targetDir || process.cwd();
-  const ciDir = join(resolved, '.ci');
+  const codeindexDir = join(resolved, '.codeindex');
 
-  const filesData = JSON.parse(readFileSync(join(ciDir, 'files.json'), 'utf-8'));
-  const coverageData = JSON.parse(readFileSync(join(ciDir, 'coverage.json'), 'utf-8'));
+  const filesData = JSON.parse(readFileSync(join(codeindexDir, 'files.json'), 'utf-8'));
+  const coverageData = JSON.parse(readFileSync(join(codeindexDir, 'coverage.json'), 'utf-8'));
 
   const fileEntry = filesData.files.find(f => f.path === file);
   if (!fileEntry) {
-    console.error(`Error: file "${file}" not found in .ci/files.json`);
+    console.error(`Error: file "${file}" not found in .codeindex/files.json`);
     process.exit(1);
   }
 
@@ -48,7 +48,7 @@ export function mark(targetDir, file, rangeStr, depth) {
   fileMark.ranges = mergeRanges(fileMark.ranges, { start, end, depth });
   fileMark.hash = currentHash;
 
-  writeFileSync(join(ciDir, 'coverage.json'), JSON.stringify(coverageData, null, 2) + '\n');
+  writeFileSync(join(codeindexDir, 'coverage.json'), JSON.stringify(coverageData, null, 2) + '\n');
 
   const coveredLines = fileMark.ranges.reduce((s, r) => s + (r.end - r.start + 1), 0);
   console.log(`Marked ${file} ${start}-${end} as ${depth} (${coveredLines}/${fileEntry.lines} lines covered)`);
