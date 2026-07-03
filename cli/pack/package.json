@@ -1,0 +1,8 @@
+{
+  "name": "codeindex-pack",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "codeindex-pack": "./bin/codeindex-pack.mjs"
+  }
+}

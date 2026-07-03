@@ -222,8 +222,24 @@
 
     ensureLayout();
 
-    // Prompt for project root if not yet selected
-    if (!rootDirHandle) {
+    headerEl.querySelector('.file-path').textContent = info.file;
+    headerEl.querySelector('.line-range').textContent =
+      ':' + info.startLine + '-' + info.endLine;
+
+    var content = null;
+
+    // Priority 1: Packed runtime (standalone mode, no local files needed)
+    if (window.__codeindexSources && window.__codeindexSources[info.file]) {
+      content = window.__codeindexSources[info.file];
+    }
+
+    // Priority 2: File System Access API (live mode)
+    if (!content && rootDirHandle) {
+      content = await readFileFromRoot(info.file);
+    }
+
+    // Priority 3: Prompt for project root if not yet selected
+    if (!content && !rootDirHandle) {
       var stored = await loadHandle();
       if (stored) {
         var perm = await stored.requestPermission({ mode: 'read' });
@@ -237,23 +253,21 @@
           rootDirHandle = handle;
           await saveHandle(handle);
         } catch (e) {
-          return;
+          // User cancelled — will fall through to error below
         }
       }
       var banner = document.getElementById('codeindex-root-banner');
       if (banner) banner.remove();
+
+      if (rootDirHandle) {
+        content = await readFileFromRoot(info.file);
+      }
     }
 
-    headerEl.querySelector('.file-path').textContent = info.file;
-    headerEl.querySelector('.line-range').textContent =
-      ':' + info.startLine + '-' + info.endLine;
-
-    // Read file content from local filesystem
-    var content = await readFileFromRoot(info.file);
     if (!content) {
       panel.classList.add('visible');
       initMonaco(function () {
-        editor.setValue('// Could not read file: ' + info.file);
+        editor.setValue('// Source not available for: ' + info.file + '\n// Run codeindex-pack to embed sources for static deployment.');
       });
       return;
     }
