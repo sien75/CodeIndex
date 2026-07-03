@@ -262,20 +262,30 @@ li {
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-body:not(.codeindex-layout) > a > section {
+/* Module card links on index page */
+a.module-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  margin: 1rem 0;
+}
+
+a.module-card section {
   display: block;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 1.25rem;
-  margin: 1rem 0;
-  color: inherit;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-body:not(.codeindex-layout) > a > section:hover {
+a.module-card:hover section {
   border-color: #bbb;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+a.module-card h2 {
+  margin-top: 0;
 }
 
 .codeindex-module-card h3 {

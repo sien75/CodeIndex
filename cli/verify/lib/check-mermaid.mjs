@@ -46,11 +46,17 @@ async function getMermaid() {
   return mermaid;
 }
 
-export async function checkMermaidBlock(code, blockIndex) {
+export async function checkMermaidBlock(rawCode, blockIndex) {
   const errors = [];
   let nodeIds = [];
+
+  // 1. HTML-escape check operates on the raw HTML content.
+  errors.push(...checkHtmlEscapes(rawCode, blockIndex));
+
+  // 2. Syntax validation operates on the decoded Mermaid source, matching
+  //    what the browser exposes via <pre class="mermaid">.textContent.
+  const code = decodeHtmlEntities(rawCode);
   const diagramHeaders = getDiagramHeaders(code);
-  errors.push(...checkHtmlEscapes(code, blockIndex));
 
   if (diagramHeaders.length > 1) {
     errors.push({
@@ -291,4 +297,19 @@ function splitFlowchartStatement(line) {
 function extractFlowchartNodeId(segment) {
   const match = segment.match(/^([A-Za-z_][\w-]*)\b/);
   return match ? match[1] : null;
+}
+
+function decodeHtmlEntities(text) {
+  const named = {
+    lt: '<', gt: '>', amp: '&', quot: '"', apos: "'", nbsp: ' '
+  };
+  return text.replace(/&(#x?[\da-fA-F]+|[a-zA-Z][a-zA-Z0-9]*);/g, (match, entity) => {
+    if (entity[0] === '#') {
+      const code = entity[1].toLowerCase() === 'x'
+        ? parseInt(entity.slice(2), 16)
+        : parseInt(entity.slice(1), 10);
+      return String.fromCodePoint(code);
+    }
+    return named[entity] || match;
+  });
 }

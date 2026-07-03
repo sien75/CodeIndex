@@ -147,15 +147,19 @@ payments via Alipay and WeChat Pay.</p>
   <li>Add to cart, place order, pay → Order & Payment</li>
 </ul>
 
-<section>
-  <h2>User Registration & Login</h2>
-  <p>Turn a phone number/email into a usable user account</p>
-</section>
+<a class="module-card" href="modules/user-registration-login.html">
+  <section>
+    <h2>User Registration & Login</h2>
+    <p>Turn a phone number/email into a usable user account</p>
+  </section>
+</a>
 
-<section>
-  <h2>Order & Payment</h2>
-  <p>Turn items in the cart into a paid order</p>
-</section>
+<a class="module-card" href="modules/order-and-payment.html">
+  <section>
+    <h2>Order & Payment</h2>
+    <p>Turn items in the cart into a paid order</p>
+  </section>
+</a>
 ```
 
 After writing, proceed to the verification step.

@@ -437,7 +437,8 @@
     loadMermaid();
   }
 
-  if (window.showDirectoryPicker) {
+  // Only prompt for project root if runtime sources are not embedded
+  if (!window.__codeindexSources && window.showDirectoryPicker) {
     restoreHandle().then(function (result) {
       if (result !== true) {
         promptForProjectRoot();
