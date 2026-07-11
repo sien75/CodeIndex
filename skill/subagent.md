@@ -113,6 +113,8 @@ Field descriptions:
 - `file`: relative path to the source file
 - `startLine` / `endLine`: line range of the code in the file
 
+**Each range must snap to a real code item boundary** (a function, method, struct, etc.), not a hand-eyeballed span. Use a tree-sitter parse or your language LSP to get exact item start/end lines — never guess. A range must not start or end inside a function body, and must not span more than one top-level item. If a node maps to several items, split it into one node per item.
+
 ### Output example
 
 ```html

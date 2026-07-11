@@ -104,7 +104,15 @@ Name each chain by user scenario (e.g., "User places an order" not "orderControl
 - At most 3 subagents per batch. Wait for the batch to fully complete before launching the next.
 - Large-file modules (entry file + direct dependencies > 1500 lines) get their own batch with only 1 subagent.
 
-Prompt for each subagent: read `subagent.md` (same directory as this file), substitute `{scenario_name}`, `{entry_file}`, `{tool_list}`, `{primary_view}`, and `{auxiliary_views}`, then use that as the subagent's full task description. The main agent doesn't need to understand the details of subagent.md — just read and pass it along.
+Prompt for each subagent: read `subagent.md` (same directory as this file), then produce the subagent's full task description by **actually replacing every placeholder** — `{scenario_name}`, `{entry_file}`, `{tool_list}`, `{primary_view}`, and `{auxiliary_views}` — with concrete values for this subagent (e.g. `tool_list` = `["rust-analyzer", "ripgrep"]`, `entry_file` = the concrete entry path). Do **not** forward the template with placeholders still in it.
+
+This substitution is mandatory and the most error-prone step — LLMs frequently skip it and paste the raw template. Guard against that:
+
+- Before dispatching each subagent, scan the final prompt text and **assert that none of the literal strings** `` `{scenario_name}` ``, `` `{entry_file}` ``, `` `{tool_list}` ``, `` `{primary_view}` ``, `` `{auxiliary_views}` `` remain. If any `{` placeholder survives, redo the substitution — the subagent cannot use tools, find its entry point, or pick a narrative lens from a literal placeholder.
+- Prefer a mechanical substitute over hand-editing: e.g. read the file then run `envsubst` (or an equivalent) with the five values exported, or do the replacement in one pass and re-read the result to verify. Never paste `subagent.md` content into the dispatch verbatim.
+- A correct `tool_list` is useless if it isn't substituted in — the subagent only knows about tools that appear by name in its own prompt.
+
+The main agent doesn't need to master every line of `subagent.md`'s guidance, but it **must** deliver the *substituted* text, not the raw template.
 
 After all subagents finish, check coverage:
 
